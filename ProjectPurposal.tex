@@ -16,18 +16,20 @@
 \setlist{nosep,leftmargin=*}
 \hypersetup{colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=black}
 
-\title{\vspace{-1.5em}\textbf{[Project Title]}}
-\author{CS/SE 4AL3 -- Project Proposal \newline
-Group [number] \newline
-[Team member 1], [Team member 2], [Team member 3]}
+\title{\vspace{-1.5em}\textbf{NFL Defensive Coverage Predictor}}
+\author{CS/SE 4AL3 -- Project Proposal \\ Group 77 \\ Justin Kwinecki, Zayed Umer, William Pol}
 \date{Fall 2026 \\ Due October 9, 2026}
 
 \begin{document}
 \maketitle
 
 \section*{Task Overview and Significance}
-\textbf{TA(s) consulted:} [Name(s)]
-[Describe the task, its real-world impact, why it matters, and what makes it challenging. Explain why the project is non-trivial and what work is novel for your team.]
+
+Our task is to recognize defensive coverages before the snap. This is challenging because defenses often try to disguise their coverage by showing one formation or alignment before the snap and executing another after the snap. This makes it difficult for an offensive player or coordinator to determine the defense's true coverage based only on its pre-snap alignment.
+
+This matters because accurately identifying defensive coverage before the play begins could help offensive coordinators and quarterbacks make better pre-snap decisions, such as adjusting the play, route combinations, or blocking scheme.
+
+This project is non-trivial because the model must make its prediction using only pre-snap information, while accounting for defensive disguises, player positioning, and different formations. The novel aspect of our project is developing a machine learning approach specifically focused on predicting the coverage before the snap, rather than using information from the play after it has already developed. We will also investigate which pre-snap features are most useful for distinguishing between different defensive coverages.
 
 \section*{Task Definition}
 \textbf{Input/data type:} [e.g., text, images, tabular records]\\
@@ -64,7 +66,14 @@ Group [number] \newline
 \end{enumerate}
 
 \section*{TA Consultation}
-[Describe what you discussed with the TA(s), the advice they gave, and how it changed or confirmed your plan.]
+
+We consulted with Abdelaziz Serour twice throughout the development of our project idea. During our first interaction, our team proposed developing 
+a SpecDec system for tool calls. However, after discussing the idea with the TA, we concluded that it was too complex and theoretical for
+the scope of the project. As a result, we decided to pivot toward a more practical and applied idea.
+
+We then developed the idea of recognizing defensive coverages during the pre-snap period. We reached out to Abdelaziz again through Outlook 
+to discuss whether this idea was feasible, and he agreed that it was a suitable project that we could proceed with.
+
 
 \newpage
 \section*{Team Contract}
@@ -83,9 +92,9 @@ Group [number] \newline
 \toprule
 Printed name & Signature & Date \\
 \midrule
-\mbox{[Member 1]} & \rule{\linewidth}{0.4pt} & [Date] \\
-\mbox{[Member 2]} & \rule{\linewidth}{0.4pt} & [Date] \\
-\mbox{[Member 3, if applicable]} & \rule{\linewidth}{0.4pt} & [Date] \\
+\mbox{Justin Kwinecki} & \rule{\linewidth}{0.4pt} & October 7, 2026 \\
+\mbox{Zayed Umer} & \rule{\linewidth}{0.4pt} & October 7, 2026  \\
+\mbox{William Pol} & \rule{\linewidth}{0.4pt} & October 7, 2026  \\
 \bottomrule
 \end{tabular}
 
