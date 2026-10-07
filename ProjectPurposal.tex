@@ -1,0 +1,93 @@
+% !TeX root = ProjectPurposal.tex
+\documentclass[12pt]{article}
+
+\usepackage[letterpaper,margin=0.8in]{geometry}
+\usepackage{setspace}
+\usepackage{newtxtext,newtxmath}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{array}
+\usepackage{microtype}
+
+\setstretch{1.5}
+\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=*}
+\hypersetup{colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=black}
+
+\title{\vspace{-1.5em}\textbf{[Project Title]}}
+\author{CS/SE 4AL3 -- Project Proposal \newline
+Group [number] \newline
+[Team member 1], [Team member 2], [Team member 3]}
+\date{Fall 2026 \\ Due October 9, 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Task Overview and Significance}
+\textbf{TA(s) consulted:} [Name(s)]
+[Describe the task, its real-world impact, why it matters, and what makes it challenging. Explain why the project is non-trivial and what work is novel for your team.]
+
+\section*{Task Definition}
+\textbf{Input/data type:} [e.g., text, images, tabular records]\\
+\textbf{Prediction task:} [classification / regression / generation]\\
+\textbf{Labels and output:} [number of classes; label definitions; single-label or multi-label; or regression target]\\
+\textbf{Unit of prediction:} [What one data point represents]
+
+[State the task precisely, including the model inputs and desired outputs.]
+
+\section*{Data Sources and Collection Plan}
+[Identify each source and provide direct links. Explain how data will be obtained (API, permitted scraping, open dataset, etc.), terms of service, access, and rate limits. Describe collection, annotation/labeling effort, preprocessing, and available metadata. Say whether you will use all data or a subset/features and why. For Kaggle, include both the Kaggle page and the original source. Do not use datasets with no source information.]
+
+\textbf{Expected dataset size:} [at least 1,000 data points; justify any exception]\\
+\textbf{Metadata:} [Available fields and their relevance]
+
+\textbf{Three example data points with labels}
+\begin{enumerate}
+  \item \textbf{Input:} [Example 1] \quad \textbf{Label:} [Label]
+  \item \textbf{Input:} [Example 2] \quad \textbf{Label:} [Label]
+  \item \textbf{Input:} [Example 3] \quad \textbf{Label:} [Label]
+\end{enumerate}
+
+\section*{Proposed Solution and Evaluation}
+[Describe features and target labels, candidate models, and how you will approach the problem. Do not propose simple linear regression. Discuss existing solutions and how your work differs. Explain evaluation design, metrics, data splits/baselines, and how you will decide whether the model is good. Name intended libraries.]
+
+\textbf{Planned libraries:} [e.g., scikit-learn, PyTorch, pandas]\\
+\textbf{Evaluation:} [Metrics, baseline(s), validation plan, and success criteria]
+
+\textbf{Sources inspiring the approach (2--5)}
+\begin{enumerate}
+  \item [Author(s), title, venue/year, URL or DOI]
+  \item [Author(s), title, venue/year, URL or DOI]
+  \item [Optional source]
+\end{enumerate}
+
+\section*{TA Consultation}
+[Describe what you discussed with the TA(s), the advice they gave, and how it changed or confirmed your plan.]
+
+\newpage
+\section*{Team Contract}
+\textit{Write this section yourselves. Do not use generative AI to write the proposal or team contract.}
+
+\textbf{Team mission:} [What is the purpose of the team?]
+
+\textbf{Roles, duties, and expectations:} [Describe each member's responsibilities and shared expectations. Focus on how you will work together.]
+
+\textbf{Leadership and coordination:} [How will you organize meetings, make decisions, track work, and share facilitation?]
+
+\textbf{Communication and conflict resolution:} [How will you raise concerns, meet, discuss disagreements, and resolve conflict? Add any other useful ground rules.]
+
+\textbf{Signatures}\\[0.5em]
+\begin{tabular}{p{0.29\textwidth}p{0.29\textwidth}p{0.29\textwidth}}
+\toprule
+Printed name & Signature & Date \\
+\midrule
+\mbox{[Member 1]} & \rule{\linewidth}{0.4pt} & [Date] \\
+\mbox{[Member 2]} & \rule{\linewidth}{0.4pt} & [Date] \\
+\mbox{[Member 3, if applicable]} & \rule{\linewidth}{0.4pt} & [Date] \\
+\bottomrule
+\end{tabular}
+
+\end{document}
+ 
