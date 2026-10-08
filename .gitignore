@@ -1,0 +1,3 @@
+# Keep downloaded competition data and derived records local.
+/data/*
+!/data/README.md

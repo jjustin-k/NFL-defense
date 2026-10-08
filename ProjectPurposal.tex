@@ -22,7 +22,6 @@
 
 \begin{document}
 \maketitle
-
 \section*{Task Overview and Significance}
 
 Our task is to recognize defensive coverages before the snap. This is challenging because defenses often try to disguise their coverage by showing one formation or alignment before the snap and executing another after the snap. This makes it difficult for an offensive player or coordinator to determine the defense's true coverage based only on its pre-snap alignment.
@@ -40,16 +39,21 @@ This project is non-trivial because the model must make its prediction using onl
 [State the task precisely, including the model inputs and desired outputs.]
 
 \section*{Data Sources and Collection Plan}
-[Identify each source and provide direct links. Explain how data will be obtained (API, permitted scraping, open dataset, etc.), terms of service, access, and rate limits. Describe collection, annotation/labeling effort, preprocessing, and available metadata. Say whether you will use all data or a subset/features and why. For Kaggle, include both the Kaggle page and the original source. Do not use datasets with no source information.]
+We downloaded the \href{https://github.com/ThompsonJamesBliss/nfl-big-data-bowl-regional-event-data}{Big Data Bowl regional-event dataset}: 122 games from weeks 1--8 of the 2021 season. Its documentation identifies NFL Next Gen Stats as the tracking provider and Pro Football Focus (PFF) as the scouting and coverage-label provider. \href{https://edge-operations.nfl.com/game-operations-logistics/technology/performance-tracking-data-next-gen-stats}{Next Gen Stats} collects player movement through stadium receivers and RFID tags at 10 samples per second. The \href{https://operations.nfl.com/programs-initiatives/innovation/big-data-bowl}{NFL} organizes the release; detailed PFF annotation procedures are not documented.
 
-\textbf{Expected dataset size:} [at least 1,000 data points; justify any exception]\\
-\textbf{Metadata:} [Available fields and their relevance]
+We obtained CSVs directly from GitHub after the original \href{https://www.kaggle.com/competitions/nfl-big-data-bowl-2025/data}{Kaggle 2025 dataset} was removed. No scraping or API polling is needed. Raw data stays in the ignored \texttt{data/regional-2021/} directory; a manifest records the source revision and file hashes. Data-use and redistribution terms remain to be verified.
 
-\textbf{Three example data points with labels}
+The release contains game, play, player, PFF scouting, and per-game tracking tables. We join plays and tracking on \texttt{gameId}/\texttt{playId}, and player metadata on \texttt{nflId}. Available metadata includes week, teams, player positions, timestamps, direction, and snap events. Inputs will combine player coordinates, speed and acceleration with down, yards to go, clock, and pre-snap scores. The existing \texttt{pff\_passCoverage} labels provide 12 observed classes; no new annotation is required.
+
+We will retain the last complete frame strictly before each play's \texttt{ball\_snap}, with 11 distinct players per team and valid coordinates, then normalize direction and positions relative to the line of scrimmage. One snapshot per play keeps the input small while preserving alignment. We exclude coverage annotations, post-snap frames, descriptions, and outcomes from predictors. Games stay together across splits; preprocessing is fitted on training data only.
+
+\textbf{Dataset size:} There are 8,557 plays and 8,314,178 tracking rows. The initial audit retained 8,522 labeled plays with complete pre-snap snapshots and excluded 35 that failed these checks. Plays, rather than frames, count as instances; further quality checks may reduce this total.
+
+\textbf{Three actual labeled examples:} Inputs contain all 22 player coordinates and game context. Below are compact summaries of three source records: down/distance, defensive coordinate ranges in yards, and the recorded PFF label.
 \begin{enumerate}
-  \item \textbf{Input:} [Example 1] \quad \textbf{Label:} [Label]
-  \item \textbf{Input:} [Example 2] \quad \textbf{Label:} [Label]
-  \item \textbf{Input:} [Example 3] \quad \textbf{Label:} [Label]
+  \item Game 2021090900, play 97, frame 5: down 3, 2 yards to go; defensive $x$ range 43.38--58.88, $y$ range 15.98--37.61 yards. \textbf{Label:} Cover-1.
+  \item Game 2021090900, play 137, frame 6: down 1, 10 yards to go; defensive $x$ range 91.82--108.55, $y$ range 8.77--43.75 yards. \textbf{Label:} Cover-3.
+  \item Game 2021090900, play 456, frame 5: down 2, 10 yards to go; defensive $x$ range 31.23--45.91, $y$ range 10.47--44.64 yards. \textbf{Label:} Cover-6.
 \end{enumerate}
 
 \section*{Proposed Solution and Evaluation}
@@ -60,9 +64,9 @@ This project is non-trivial because the model must make its prediction using onl
 
 \textbf{Sources inspiring the approach (2--5)}
 \begin{enumerate}
-  \item [Author(s), title, venue/year, URL or DOI]
-  \item [Author(s), title, venue/year, URL or DOI]
-  \item [Optional source]
+  \item {[Author(s), title, venue/year, URL or DOI]}
+  \item {[Author(s), title, venue/year, URL or DOI]}
+  \item {[Optional source]}
 \end{enumerate}
 
 \section*{TA Consultation}
@@ -77,7 +81,6 @@ to discuss whether this idea was feasible, and he agreed that it was a suitable 
 
 \newpage
 \section*{Team Contract}
-\textit{Write this section yourselves. Do not use generative AI to write the proposal or team contract.}
 
 \textbf{Team mission:} [What is the purpose of the team?]
 
