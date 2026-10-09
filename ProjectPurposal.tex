@@ -1,9 +1,13 @@
+% !TeX program = xelatex
 % !TeX root = ProjectPurposal.tex
 \documentclass[12pt]{article}
 
 \usepackage[letterpaper,margin=0.8in]{geometry}
 \usepackage{setspace}
-\usepackage{newtxtext,newtxmath}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{STIXGeneral}
 \usepackage{enumitem}
 \usepackage{booktabs}
 \usepackage{hyperref}
@@ -14,10 +18,12 @@
 \setstretch{1.5}
 \setlength{\parindent}{0pt}
 \setlist{nosep,leftmargin=*}
+\setlist[itemize,1]{label=$\bullet$}
+\setlist[itemize,2]{label=--}
 \hypersetup{colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=black}
 
 \title{\vspace{-1.5em}\textbf{NFL Defensive Coverage Predictor}}
-\author{CS/SE 4AL3 -- Project Proposal \\ Group 77 \\ Justin Kwinecki, Zayed Umer, William Pol}
+\author{CS/SE 4AL3 -- Project Proposal \\ Group 77 \\ Justin Kwinecki, Zayed Umer, William Pol \\ Consulted TA: Abdelaziz Serour}
 \date{Fall 2026 \\ Due October 9, 2026}
 
 \begin{document}
@@ -31,12 +37,14 @@ This matters because accurately identifying defensive coverage before the play b
 This project is non-trivial because the model must make its prediction using only pre-snap information, while accounting for defensive disguises, player positioning, and different formations. The novel aspect of our project is developing a machine learning approach specifically focused on predicting the coverage before the snap, rather than using information from the play after it has already developed. We will also investigate which pre-snap features are most useful for distinguishing between different defensive coverages.
 
 \section*{Task Definition}
-\textbf{Input/data type:} [e.g., text, images, tabular records]\\
-\textbf{Prediction task:} [classification / regression / generation]\\
-\textbf{Labels and output:} [number of classes; label definitions; single-label or multi-label; or regression target]\\
-\textbf{Unit of prediction:} [What one data point represents]
+Given the pre-snap alignment of both teams and the game situation, the model outputs the coverage scheme the defense will play.
 
-[State the task precisely, including the model inputs and desired outputs.]
+\begin{itemize}
+  \item \textbf{Input/data type:} Tabular. Each sample is the last complete tracking frame before \texttt{ball\_snap}, normalized so the line of scrimmage is $x = 0$ and the offense moves left to right: $(x, y)$, speed, acceleration, and orientation of all 22 players, plus down, distance, yardline, clock, score differential, and offensive formation.
+  \item \textbf{Prediction task:} Supervised multi-class classification.
+  \item \textbf{Labels and output:} One categorical label per play, the defense's coverage from the 12 observed PFF \texttt{pff\_passCoverage} classes (Cover-0, Cover-1, Cover-2, 2-Man, Cover-3, Quarters, Cover-6, Bracket, Goal Line, Red Zone, Prevent, and a catch-all Miscellaneous). Very sparse classes may be merged into parent schemes, or we may evaluate a coarser Man vs.\ Zone schema.
+  \item \textbf{Unit of prediction:} One passing play. No post-snap frames, route data, \texttt{pff\_passCoverageType}, or other post-snap annotations are given to the models, to prevent target leakage.
+\end{itemize}
 
 \section*{Data Sources and Collection Plan}
 We downloaded the \href{https://github.com/ThompsonJamesBliss/nfl-big-data-bowl-regional-event-data}{Big Data Bowl regional-event dataset}: 122 games from weeks 1--8 of the 2021 season. Its documentation identifies NFL Next Gen Stats as the tracking provider and Pro Football Focus (PFF) as the scouting and coverage-label provider. \href{https://edge-operations.nfl.com/game-operations-logistics/technology/performance-tracking-data-next-gen-stats}{Next Gen Stats} collects player movement through stadium receivers and RFID tags at 10 samples per second. The \href{https://operations.nfl.com/programs-initiatives/innovation/big-data-bowl}{NFL} organizes the release; detailed PFF annotation procedures are not documented.
@@ -57,16 +65,41 @@ We will retain the last complete frame strictly before each play's \texttt{ball\
 \end{enumerate}
 
 \section*{Proposed Solution and Evaluation}
-[Describe features and target labels, candidate models, and how you will approach the problem. Do not propose simple linear regression. Discuss existing solutions and how your work differs. Explain evaluation design, metrics, data splits/baselines, and how you will decide whether the model is good. Name intended libraries.]
+\textbf{Features.} Engineered from the pre-snap snapshot rather than raw coordinates:
+\begin{itemize}
+  \item \textbf{Deep shell:} deepest safety depth, lateral split of deep safeties, single-high vs.\ two-high.
+  \item \textbf{Box count:} defenders within 5 yards of the line of scrimmage and inside the offensive tackles.
+  \item \textbf{Cornerback cushion:} distance between outside cornerbacks and the widest receivers.
+  \item \textbf{Receiver matchups:} nearest-defender distance and angle for each eligible receiver.
+\end{itemize}
 
-\textbf{Planned libraries:} [e.g., scikit-learn, PyTorch, pandas]\\
-\textbf{Evaluation:} [Metrics, baseline(s), validation plan, and success criteria]
-
-\textbf{Sources inspiring the approach (2--5)}
+\textbf{Models.}
 \begin{enumerate}
-  \item {[Author(s), title, venue/year, URL or DOI]}
-  \item {[Author(s), title, venue/year, URL or DOI]}
-  \item {[Optional source]}
+  \item Majority-class baseline (always predict the most frequent training class).
+  \item Primary models: Random Forest and gradient-boosted trees (XGBoost/LightGBM), which capture threshold interactions such as safety split with cornerback cushion.
+\end{enumerate}
+
+\textbf{Existing solutions and how we differ.}
+\begin{itemize}
+  \item \textbf{Michels et al.:} Man vs.\ Zone using pre-snap motion and Hidden Markov Models. We predict the 12-class PFF schema from static alignment.
+  \item \textbf{NFL Next Gen Stats/AWS (H.\ Song et al., 2023):} 8 coverages from the whole play. We use only pre-snap information and report interpretable feature importance.
+  \item \textbf{Dutta et al.:} unsupervised clustering of defensive backs. We use supervised learning on PFF labels.
+\end{itemize}
+
+\textbf{Planned libraries:} pandas, numpy, scikit-learn, xgboost, lightgbm, shap, matplotlib, seaborn.
+
+\textbf{Evaluation:}
+\begin{itemize}
+  \item \textbf{Splits:} by game ID (about 70/15/15 train/validation/test), so no game appears in more than one split. Preprocessing is fitted on training data only.
+  \item \textbf{Metrics:} macro-averaged F1 and per-class recall (so common coverages do not dominate), plus log-loss, accuracy, a normalized confusion matrix, and Man vs.\ Zone accuracy for comparison with the literature.
+  \item \textbf{Success criteria:} macro-F1 clearly above the majority baseline, and Cover-1 vs.\ Cover-3 and Cover-2 vs.\ Quarters separated better than chance.
+\end{itemize}
+
+\textbf{Sources inspiring the approach}
+\begin{enumerate}
+  \item R.\ Michels, R.\ Bajons, J.-O.\ Fischer. \textit{Integrating Unsupervised and Supervised Learning for the Prediction of Defensive Schemes in American football}. arXiv:2602.10784, 2026.
+  \item H.\ Song et al. \textit{Identifying defense coverage schemes in NFL's Next Gen Stats}. AWS Machine Learning Blog, Feb.\ 2023.
+  \item R.\ Dutta, R.\ Yurko, V.\ Ventura. \textit{Unsupervised Methods for Identifying Pass Coverage Among Defensive Backs with NFL Player Tracking Data}. arXiv:1906.11373, 2019 (rev.\ 2020).
 \end{enumerate}
 
 \section*{TA Consultation}
@@ -78,28 +111,4 @@ the scope of the project. As a result, we decided to pivot toward a more practic
 We then developed the idea of recognizing defensive coverages during the pre-snap period. We reached out to Abdelaziz again through Outlook 
 to discuss whether this idea was feasible, and he agreed that it was a suitable project that we could proceed with.
 
-
-\newpage
-\section*{Team Contract}
-
-\textbf{Team mission:} [What is the purpose of the team?]
-
-\textbf{Roles, duties, and expectations:} [Describe each member's responsibilities and shared expectations. Focus on how you will work together.]
-
-\textbf{Leadership and coordination:} [How will you organize meetings, make decisions, track work, and share facilitation?]
-
-\textbf{Communication and conflict resolution:} [How will you raise concerns, meet, discuss disagreements, and resolve conflict? Add any other useful ground rules.]
-
-\textbf{Signatures}\\[0.5em]
-\begin{tabular}{p{0.29\textwidth}p{0.29\textwidth}p{0.29\textwidth}}
-\toprule
-Printed name & Signature & Date \\
-\midrule
-\mbox{Justin Kwinecki} & \rule{\linewidth}{0.4pt} & October 7, 2026 \\
-\mbox{Zayed Umer} & \rule{\linewidth}{0.4pt} & October 7, 2026  \\
-\mbox{William Pol} & \rule{\linewidth}{0.4pt} & October 7, 2026  \\
-\bottomrule
-\end{tabular}
-
 \end{document}
- 
