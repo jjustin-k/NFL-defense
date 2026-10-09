@@ -1,3 +1,9 @@
 # Keep downloaded competition data and derived records local.
 /data/*
 !/data/README.md
+
+# LaTeX build files
+*.aux
+*.log
+*.out
+missfont.log

@@ -1,0 +1,69 @@
+% !TeX program = xelatex
+% !TeX root = TeamContract.tex
+\documentclass[12pt]{article}
+
+\usepackage[letterpaper,margin=0.8in]{geometry}
+\usepackage{setspace}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{STIXGeneral}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{microtype}
+
+\setstretch{1.5}
+\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=*}
+\setlist[itemize,1]{label=$\bullet$}
+\setlist[itemize,2]{label=--}
+\hypersetup{colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=black}
+
+\title{\vspace{-1.5em}\textbf{Team Contract}}
+\author{CS/SE 4AL3 \\ Group 77 \\ Justin Kwinecki, Zayed Umer, William Pol}
+\date{Fall 2026}
+
+\begin{document}
+\maketitle
+
+\textbf{Team mission:} We will design, implement, and evaluate an interpretable machine learning pipeline that predicts NFL pre-snap defensive coverage from tracking data, with reproducible experiments, fair workload distribution, and on-time milestones.
+
+\textbf{Roles, duties, and expectations:}
+\begin{itemize}
+  \item \textbf{Justin Kwinecki:} project management, proposal and milestone reports, literature synthesis, main contact for the TA.
+  \item \textbf{Zayed Umer:} data engineering: ingestion, line-of-scrimmage normalization, auditing and cleaning, game-based splits.
+  \item \textbf{William Pol:} modeling and feature engineering: pre-snap features (safety split, cushion, box count), baseline and gradient-boosted models, evaluation (macro-F1, confusion matrices, SHAP).
+  \item Everyone reviews each other's work and helps where needed.
+\end{itemize}
+
+\textbf{Leadership and coordination:}
+\begin{itemize}
+  \item \textbf{Meetings:} weekly, 45 minutes, Mondays at 5:00 PM on Discord or in person. Facilitation rotates each week.
+  \item \textbf{Tracking:} shared GitHub repository, with work tracked through Issues and feature branches.
+  \item \textbf{Review:} no pull request is merged into \texttt{main} without approval from at least one other member.
+\end{itemize}
+
+\textbf{Communication and conflict resolution:}
+\begin{itemize}
+  \item \textbf{Disagreements or workload imbalance:} hold an informal meeting to discuss and rebalance tasks.
+  \item \textbf{Missed deadline without notice:} a written recovery plan within 48 hours.
+  \item \textbf{Unresolved:} if a member is unresponsive for more than 72 hours or a conflict cannot be resolved internally, we contact the TA and instructor with our Git history and meeting notes.
+\end{itemize}
+
+\newpage
+\textbf{Signatures}\\[0.5em]
+\begin{tabular}{p{0.29\textwidth}p{0.29\textwidth}p{0.29\textwidth}}
+\toprule
+Printed name & Signature & Date \\
+\midrule
+\mbox{Justin Kwinecki} & \rule{\linewidth}{0.4pt} & October 7, 2026 \\
+\mbox{Zayed Umer} & \rule{\linewidth}{0.4pt} & October 7, 2026  \\
+\mbox{William Pol} & \vtop{\hbox{\includegraphics[height=0.9cm]{assets/signature-william.png}}\vskip-0.3em\hrule width\linewidth height 0.4pt} & October 7, 2026  \\
+\bottomrule
+\end{tabular}
+
+\end{document}
